@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang cá nhân</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        header {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        h2 {
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+        .contact-info p, .product-item p {
+            margin: 10px 0;
+        }
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .product-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 200px;
+            text-align: center;
+        }
+        .product-item img {
+            width: 100%;
+            height: auto;
+        }
+        .product-item h3 {
+            padding: 10px;
+            font-size: 1.2em;
+        }
+        .product-item p {
+            padding: 0 10px 10px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .hidden {
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .order-table th, .order-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .order-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Trang cá nhân của tôi</h1>
+</header>
+
+<div class="container">
+    <!-- Section for contact info -->
+    <div class="section" id="contact-info">
+        <h2>Thông tin liên hệ</h2>
+        <div id="contact-list"></div>
+        <button class="button" onclick="showContactForm()">Thêm thông tin liên hệ</button>
+        <div id="contact-form" class="hidden">
+            <h3>Thêm/Sửa Thông tin liên hệ</h3>
+            <div class="form-group">
+                <label for="contact-email">Email:</label>
+                <input type="email" id="contact-email">
+            </div>
+            <div class="form-group">
+                <label for="contact-phone">Số điện thoại:</label>
+                <input type="tel" id="contact-phone">
+            </div>
+            <div class="form-group">
+                <label for="contact-zalo">Zalo:</label>
+                <input type="url" id="contact-zalo">
+            </div>
+            <div class="form-group">
+                <label for="contact-facebook">Facebook cá nhân:</label>
+                <input type="url" id="contact-facebook">
+            </div>
+            <div class="form-group">
+                <label for="contact-fanpages">Facebook Fanpages (ngăn cách bằng dấu phẩy):</label>
+                <input type="text" id="contact-fanpages">
+            </div>
+            <button class="button" onclick="saveContactInfo()">Lưu</button>
+            <button class="button" onclick="hideContactForm()">Hủy</button>
+        </div>
+    </div>
+
+    <!-- Section for products -->
+    <div class="section" id="product-list">
+        <h2>Danh mục hàng hóa</h2>
+        <div id="product-container"></div>
+        <button class="button" onclick="showProductForm()">Thêm sản phẩm</button>
+        <div id="product-form" class="hidden">
+            <h3>Thêm/Sửa Sản phẩm</h3>
+            <div class="form-group">
+                <label for="product-image">Hình ảnh (URL):</label>
+                <input type="url" id="product-image">
+            </div>
+            <div class="form-group">
+                <label for="product-code">Mã sản phẩm:</label>
+                <input type="text" id="product-code">
+            </div>
+            <div class="form-group">
+                <label for="product-name">Tên sản phẩm:</label>
+                <input type="text" id="product-name">
+            </div>
+            <div class="form-group">
+                <label for="product-description">Mô tả sản phẩm:</label>
+                <input type="text" id="product-description">
+            </div>
+            <div class="form-group">
+                <label for="product-price">Đơn giá sản phẩm:</label>
+                <input type="number" id="product-price">
+            </div>
+            <button class="button" onclick="saveProduct()">Lưu</button>
+            <button class="button" onclick="hideProductForm()">Hủy</button>
+        </div>
+    </div>
+
+    <!-- Section for order form -->
+    <div class="section" id="order-form" class="hidden">
+        <h2>Đặt hàng</h2>
+        <div class="form-group">
+            <label for="buyer-name">Tên người mua:</label>
+            <input type="text" id="buyer-name">
+        </div>
+        <div class="form-group">
+            <label for="buyer-phone">Số điện thoại người mua:</label>
+            <input type="tel" id="buyer-phone">
+        </div>
+        <div class="form-group">
+            <label for="product-select">Tên hàng hóa:</label>
+            <select id="product-select"></select>
+        </div>
+        <div class="form-group">
+            <label for="product-quantity">Số lượng:</label>
+            <input type="number" id="product-quantity" oninput="calculateTotal()">
+        </div>
+        <div class="form-group">
+            <label for="total-price">Thành tiền:</label>
+            <input type="text" id="total-price" readonly>
+        </div>
+        <button class="button" onclick="confirmOrder()">Xác nhận mua hàng</button>
+    </div>
+
+    <!-- Section for order list -->
+    <div class="section" id="order-list">
+        <h2>Thống kê đơn hàng</h2>
+        <table class="order-table" id="order-table">
+            <thead>
+                <tr>
+                    <th>Tên người mua</th>
+                    <th>Số điện thoại</th>
+                    <th>Tên hàng hóa</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Orders will be added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const contactForm = document.getElementById('contact-form');
+    const productForm = document.getElementById('product-form');
+    const orderForm = document.getElementById('order-form');
+    const contactList = document.getElementById('contact-list');
+    const productContainer = document.getElementById('product-container');
+    const orderTableBody = document.getElementById('order-table').querySelector('tbody');
+    const productSelect = document.getElementById('product-select');
+
+    let contactInfo = JSON.parse(localStorage.getItem('contactInfo')) || {};
+    let products = JSON.parse(localStorage.getItem('products')) || [];
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderContactInfo();
+        renderProducts();
+        renderOrders();
+        populateProductSelect();
+        document.getElementById('product-quantity').addEventListener('input', calculateTotal);
+        document.getElementById('product-select').addEventListener('change', calculateTotal);
+    });
+
+    function showContactForm() {
+        contactForm.classList.remove('hidden');
+    }
+
+    function hideContactForm() {
+        contactForm.classList.add('hidden');
+    }
+
+    function saveContactInfo() {
+        contactInfo.email = document.getElementById('contact-email').value;
+        contactInfo.phone = document.getElementById('contact-phone').value;
+        contactInfo.zalo = document.getElementById('contact-zalo').value;
+        contactInfo.facebook = document.getElementById('contact-facebook').value;
+        contactInfo.fanpages = document.getElementById('contact-fanpages').value.split(',').map(fanpage => fanpage.trim());
+
+        localStorage.setItem('contactInfo', JSON.stringify(contactInfo));
+        renderContactInfo();
+        hideContactForm();
+    }
+
+    function renderContactInfo() {
+        contactList.innerHTML = `
+            <p>Email: ${contactInfo.email || ''}</p>
+            <p>Số điện thoại: ${contactInfo.phone || ''}</p>
+            <p>Zalo: <a href="${contactInfo.zalo || '#'}" target="_blank">${contactInfo.zalo || ''}</a></p>
+            <p>Facebook cá nhân: <a href="${contactInfo.facebook || '#'}" target="_blank">${contactInfo.facebook || ''}</a></p>
+            <p>Fanpages: ${contactInfo.fanpages ? contactInfo.fanpages.map(fanpage => `<a href="${fanpage}" target="_blank">${fanpage}</a>`).join(', ') : ''}</p>
+        `;
+    }
+
+    function showProductForm() {
+        productForm.classList.remove('hidden');
+    }
+
+    function hideProductForm() {
+        productForm.classList.add('hidden');
+    }
+
+    function saveProduct() {
+        const product = {
+            image: document.getElementById('product-image').value,
+            code: document.getElementById('product-code').value,
+            name: document.getElementById('product-name').value,
+            description: document.getElementById('product-description').value,
+            price: parseFloat(document.getElementById('product-price').value)
+        };
+
+        products.push(product);
+        localStorage.setItem('products', JSON.stringify(products));
+        renderProducts();
+        populateProductSelect();
+        hideProductForm();
+    }
+
+    function renderProducts() {
+        productContainer.innerHTML = '';
+        products.forEach((product, index) => {
+            const productElement = document.createElement('div');
+            productElement.classList.add('product-item');
+            productElement.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p>Mã sản phẩm: ${product.code}</p>
+                <p>${product.description}</p>
+                <p>Giá: ${product.price.toLocaleString()} VND</p>
+                <button class="button" onclick="showOrderForm(${index})">Mua hàng</button>
+            `;
+            productContainer.appendChild(productElement);
+        });
+    }
+
+    function populateProductSelect() {
+        productSelect.innerHTML = '';
+        products.forEach((product, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.text = product.name;
+            productSelect.appendChild(option);
+        });
+    }
+
+    function showOrderForm(productIndex) {
+        orderForm.classList.remove('hidden');
+        document.getElementById('product-select').value = productIndex;
+        calculateTotal();
+    }
+
+    function calculateTotal() {
+        const selectedProductIndex = document.getElementById('product-select').value;
+        const quantity = document.getElementById('product-quantity').value;
+        const total = products[selectedProductIndex].price * quantity;
+        document.getElementById('total-price').value = total.toLocaleString() + ' VND';
+    }
+
+    function confirmOrder() {
+        const order = {
+            buyerName: document.getElementById('buyer-name').value,
+            buyerPhone: document.getElementById('buyer-phone').value,
+            productName: products[document.getElementById('product-select').value].name,
+            quantity: parseInt(document.getElementById('product-quantity').value),
+            totalPrice: document.getElementById('total-price').value
+        };
+
+        orders.push(order);
+        localStorage.setItem('orders', JSON.stringify(orders));
+        renderOrders();
+        orderForm.classList.add('hidden');
+        alert('Mua hàng thành công!');
+    }
+
+    function renderOrders() {
+        orderTableBody.innerHTML = '';
+        orders.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${order.buyerName}</td>
+                <td>${order.buyerPhone}</td>
+                <td>${order.productName}</td>
+                <td>${order.quantity}</td>
+                <td>${order.totalPrice}</td>
+            `;
+            orderTableBody.appendChild(row);
+        });
+    }
+</script>
+
+</body>
+</html>
